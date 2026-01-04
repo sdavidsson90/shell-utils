@@ -192,35 +192,3 @@ open_python_console() {
 
 command -v zmodload >/dev/null && bindkey -s '^P' open_python_console^M
 command -v shopt >/dev/null && bind '"^P":"open_python_console^M"'
-
-
-# Hvad hvis man ikke behøvede vælge miljø før man kalder python
-# Hvcad hvis den selv fandt ud af at burge den rigtige python
-# add-zsh-hook
-# add-zsh-hook preexec
-# 
-# python_preexec() {
-#   [[ $1 == "python3" ]] || return true
-#   [[ -n $2 ]] || return true
-# 
-#   # If pip...
-#   # Find venv
-#   search_path="$PWD"
-#   while true; do
-#     if [[ -f "$search_path/.venv/bin/activate" ]]; then
-#       venv_name=$(basename "$search_path")
-#       venv_path="$search_path/.venv"
-#       [[ "$venv_path" == "$VIRTUAL_ENV" ]] && break
-#     fi
-#     [[ $(realpath "$search_path") == "/" ]] && break
-#     search_path="$(realpath "$search_path/..")"
-#   done
-# 
-#   echo "run with this python"
-# 
-#   # If UV...
-#   # Found uv.lock
-# 
-# 
-# 
-#     }
