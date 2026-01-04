@@ -1,3 +1,3 @@
 ef() {
-  env | fzf
+  set | fzf
 }

@@ -1,7 +1,10 @@
-# -------------------------------------------------------
-# cd_up: go to parent directory
-
 cd_up() {
+
+  # --
+  # Change into the current directory's parent directory.
+  # Save $PWD to $LWD (latest working directory), before
+  # doing so - so we can use "cd_down" to come back.
+  # --
 
   if [[ -z "$LWD" ]]; then
     export LWD="$PWD"
@@ -24,11 +27,12 @@ cd_up() {
 
 }
 
-# -------------------------------------------------------
-# cd_down: go (back) down one directory (child)
-# only works if you used `cd_up` prior to using this.
-
 cd_down() {
+
+  # --
+  # cd_down: go (back) down one directory (child)
+  # only works if you used `cd_up` prior to using this.
+  # --
 
   # Sanity checks
   if [[ -z "$LWD" ]]; then
@@ -68,12 +72,29 @@ cd_down() {
 
 }
 
-# -------------------------------------------------------
-# cd into newest directory
-#  cdn 1: cd into newest directory
-#  cdn 2: cd into second newest directory
+cd_bottom() {
+
+  # Sanity checks
+  if [[ -z "$LWD" ]]; then
+    echo "No bottom to go back to"
+    return 1
+  fi
+
+  if [[ $PWD == $LWD ]]; then
+    echo 'Already at bottom!'
+    return 1
+  fi
+
+  cd $LWD
+}
 
 cd_newest() {
+
+  # --
+  # cd into newest directory
+  #  cdn 1: cd into newest directory
+  #  cdn 2: cd into second newest directory
+  # --
 
   if [ -z $1 ]; then
     n=1
@@ -95,8 +116,7 @@ cd_newest() {
 alias cdn=cd_newest
 
 # -------------------------------------------------------
-# -- Keybinds
-#
+# -- Keybinds:
 # ctrl + up-arrow : cd in to parent dir
 # ctrl + down-arrow : cd in to child dir
 # ctrl + n : cd in to newest dir
@@ -105,11 +125,9 @@ if command -v zmodload >/dev/null 2>&1; then # if zsh
   bindkey -s "[1;5A" cd_up
   bindkey -s "[1;5B" cd_down
   bindkey -s "" cd_newest
+  bindkey -s "<M-C-Down>" cd_bottom
 elif command -v shopt >/dev/null 2>&1; then # if bash
-  bind '"[1;5A":"cd_up
-"'
-  bind '"[1;5B":"cd_down
-"'
-  bind '"":"cd_newest
-"'
+  bind '"[1;5A":"cd_up"'
+  bind '"[1;5B":"cd_down"'
+  bind '"":"cd_newest"'
 fi

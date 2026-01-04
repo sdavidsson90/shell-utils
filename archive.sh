@@ -1,3 +1,5 @@
+# Automatically archives
+
 archive() {
 
   if [ -z "$@" ]; then

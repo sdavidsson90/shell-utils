@@ -66,7 +66,7 @@ tk() {
     return 1
   fi
 
-  for i in $(tmux ls | fzf | cut -d ':' -f1); do
+  for i in "$(tmux ls | fzf | cut -d ':' -f1)"; do
     tmux kill-session -t $i
     echo "Killed Tmux session: $i"
   done
@@ -87,8 +87,8 @@ tka() {
     return 1
   fi
 
-  for i in $(tmux ls | cut -d ':' -f1); do
-    tmux kill-session -t $i
+  for i in "$(tmux ls | cut -d ':' -f1)"; do
+    tmux kill-session -t "$i"
     echo "Killed session: $i"
   done
 
@@ -97,6 +97,33 @@ tka() {
     echo "There are no more open Tmux sessions."
     return 1
   fi
+}
+# -----------
+# Tmux rename
+
+trn() {
+
+  tmux ls >/dev/null 2>&1
+  if [[ $? == 1 ]]; then
+    echo "There are no open Tmux sessions."
+    return 1
+  fi
+
+  echo -n "Rename Tmux session: "
+  target="$(tmux ls | fzf --height=7 | cut -d ':' -f1)"
+
+  if [[ -z $target ]]; then
+    # echo -ne "\n\033[A\r\033[K"
+    return 127
+  fi
+
+  echo "$target"
+  echo -n "Enter new name: "
+
+  response=$(bash -c "read response; echo -n \$response")
+
+  tmux rename-session -t "$target" "$response"
+
 }
 
 # ----------------------
