@@ -2,11 +2,14 @@ command -v eza >/dev/null || return 1
 
 t() {
 
-  # If arg is number, use this as recursion depth
-  [[ "$1" =~ ^[0-9]+$ ]] && depth="-L=$1" || depth="-L=3"
+  depth="-L=3"
+  dir=$PWD
 
-  # If arg is dir, recurse into that
-  [[ -d $1 ]] && dir=$1 || dir=$PWD
+  [[ -d "$1" ]] && dir="$1"
+  [[ -d "$2" ]] && dir="$2"
 
-  eza -a --tree --icons -I .git $depth $dir
+  [[ "$1" =~ ^[0-9]+$ ]] && depth="-L=$1"
+  [[ "$2" =~ ^[0-9]+$ ]] && depth="-L=$2"
+
+  eza -a --tree --icons -I .git "$depth" "$dir"
 }
