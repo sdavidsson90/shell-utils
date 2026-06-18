@@ -1,15 +1,21 @@
 stopwatch() {
 
-  trap 'echo -e "\rStopwatch: $(($(date +%s) - $anfang))  " ; return 0' SIGINT
+  # Hide cursor
+  tput civis
+
+  # Hide control characters (^C)
+  stty -echoctl
+
+  trap 'echo -e "\rStopwatch ran for $sec"; tput cnorm; return 0' SIGINT
 
   anfang=$(date +%s)
 
   if [[ $# -eq 0 ]]; then
     while true; do
-      echo -en "\rStopwatch: $(($(date +%s) - $anfang))"
+      sec=$(($(date +%s) - $anfang))
+      echo -en "\rStopwatch: $sec"
       sleep 1
     done
   fi
-
 
 }
