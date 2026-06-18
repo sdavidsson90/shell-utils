@@ -16,13 +16,13 @@ kat() {
   if [ -z $1 ]; then
     target_files=()
     for i in *; do
-      target_files+="$i"
+      target_files+=("$i")
     done
   else
     input=("$@")
     target_files=()
     for i in ${input[@]}; do
-      target_files+="$i"
+      target_files+=("$i")
     done
   fi
 
