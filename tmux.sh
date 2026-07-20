@@ -66,7 +66,7 @@ tk() {
     return 1
   fi
 
-  for i in "$(tmux ls | fzf | cut -d ':' -f1)"; do
+  for i in $(tmux ls | fzf | cut -d ':' -f1); do
     tmux kill-session -t $i
     echo "Killed Tmux session: $i"
   done
@@ -87,7 +87,7 @@ tka() {
     return 1
   fi
 
-  for i in "$(tmux ls | cut -d ':' -f1)"; do
+  for i in $(tmux ls | cut -d ':' -f1); do
     tmux kill-session -t "$i"
     echo "Killed session: $i"
   done

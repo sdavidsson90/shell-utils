@@ -6,8 +6,8 @@ upgrade_macos() {
   softwareupdate --install --all
 }
 
-
 upgrades() {
   # upgrade_macos
   brew_upgrade
+  [ "$(uname)" = "mba25" ] && mas upgrade
 }

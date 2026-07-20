@@ -1,7 +1,8 @@
-command -v brew >/dev/null || return 1
+command -v brew >/dev/null || return 1
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_ENV_HINTS=1
 
 brew_list() {
   apps=()
@@ -13,15 +14,17 @@ brew_list() {
 brew_remove() {
   selected=($(brew_list))
   for i in "${selected[@]}"; do
-    brew remove "$i"
+    brew remove --zap "$i"
   done
+  brew autoremove
+  brew cleanup --prune=all # Clears cache
 }
 
 brew_upgrade() {
   echo "⚙︎ Checking for updates to Homebrew"
   brew update
-  brew upgrade
+  brew upgrade -y
   brew doctor
   brew autoremove
-  brew cleanup
+  brew cleanup --prune=all # Clears cache
 }
