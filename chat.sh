@@ -5,8 +5,13 @@ chat_clear() {
   unset previous_response_id
 }
 
+chat_list_models() {
+  curl -sS https://api.openai.com/v1/models -H "Authorization: Bearer $OPENAI_API_KEY" | jq -r '(["id","created"] | @tsv), (.data[] | [.id, (.created | gmtime | strftime("%Y-%m-%d"))] | @tsv)' | column -t -s $'\t'
+}
+
 chat() {
   local model="gpt-5.6-luna"
+  local user="Sighvatur"
   local state_dir="${HOME}/.local/state/chat"
   local input
   local output
@@ -15,7 +20,7 @@ chat() {
   # --------------
   tput bold
   tput setaf 4
-  echo "Sighvatur:"
+  echo "${user}:"
   tput sgr0
   vared input
   echo ""
@@ -51,6 +56,8 @@ chat() {
   tput setaf 2
   echo "${model}:"
   tput sgr0
-  previous_response_id=$(jq -r '.id' <<<"$output")
   jq -r '.output[]?.content[]? | select(.type == "output_text") | .text' <<<"$output" | glow -w 0
+
+  # ------------
+  previous_response_id=$(jq -r '.id' <<<"$output")
 }
